@@ -227,7 +227,7 @@ num_slices: -1
 
 # Tokenizer
 vocab_size: 32_000 # powers of 2 for sharding
-tokenizer_path: "assets/tokenizer.llama2"
+tokenizer_path: "meta-llama/Llama-2-7b-chat-hf"
 tokenize_train_data: True  # False if the dataset is pre-tokenized
 tokenize_eval_data: True  # False if the dataset is pre-tokenized
 add_bos: True

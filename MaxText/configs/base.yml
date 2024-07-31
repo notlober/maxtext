@@ -242,15 +242,15 @@ train_data_column: 'text'
 eval_data_column: 'text'
 # dataset_type must be synthetic, hf, grain, tfds
 # details in: https://github.com/google/maxtext/blob/main/getting_started/Data_Input_Pipeline.md
-dataset_type: tfds
+dataset_type: hf
 # for TFDS input pipeline (dataset_type=tfds)
 dataset_path: "" # your path given as argument in download_dataset.sh, e.g. "gs://my-maxtext-dataset/"
 dataset_name: 'c4/en:3.0.1'
 eval_dataset_name: 'c4/en:3.0.1'
 eval_split: 'validation'
 # for HuggingFace input pipeline (dataset_type=hf)
-hf_path: ''
-hf_data_dir: ''
+hf_path: 'allenai/c4'
+hf_data_dir: 'tr'
 hf_train_files: ''
 hf_eval_split: ''
 hf_eval_files: ''
@@ -279,7 +279,7 @@ learning_rate_schedule_steps: -1 # By default the length of the schedule is set 
 
 max_target_length: 2048 # Maximum sequence length
 max_prefill_predict_length: 64 # Maximum length for the prefill when doing autoregression
-prompt: "I love to" # Prompt for language model sampling.
+prompt: "seni seviyorum" # Prompt for language model sampling.
 load_from_prefill_dir: False # If true, decode.py doesn't "prefill" but just reads from directory
 prefill_cache_dir: "" # If set and load_from_prefill_dir, decode.py reads from directory. If set, decode.py writes to directory
 autoregressive_decode_assert: ""

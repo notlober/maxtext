@@ -29,6 +29,7 @@ from layers import linears
 from layers import normalizations
 from layers import models
 from layers import quantizations
+from layers import rnn
 
 import common_types
 from typing import Optional
@@ -91,33 +92,18 @@ class LlamaDecoderLayer(nn.Module):
 
     lnx = nn.with_logical_constraint(lnx, ("activation_batch", "activation_length", "activation_embed"))
 
-    # Self-attention block
-    attention_layer = Attention(
+    print("GONNA USE RNN")
+    rnn_layer = rnn.RNN(
         config=cfg,
-        num_query_heads=cfg.num_query_heads,
-        num_kv_heads=cfg.num_kv_heads,
-        head_dim=cfg.head_dim,
-        max_target_length=cfg.max_target_length,
-        max_prefill_predict_length=cfg.max_prefill_predict_length,
-        attention_kernel=cfg.attention,
         mesh=mesh,
         dtype=cfg.dtype,
         weight_dtype=cfg.weight_dtype,
-        dropout_rate=cfg.dropout_rate,
-        name="self_attention",
         quant=self.quant,
-        kv_quant=quantizations.configure_kv_quant(cfg),
-        prefill_cache_axis_order=tuple([int(i) for i in cfg.prefill_cache_axis_order.split(",")]),
-        ar_cache_axis_order=tuple([int(i) for i in cfg.ar_cache_axis_order.split(",")]),
-        compute_axis_order=tuple([int(i) for i in cfg.compute_axis_order.split(",")]),
-        reshape_q=cfg.reshape_q,
-        use_ragged_attention=cfg.use_ragged_attention,
-        ragged_block_size=cfg.ragged_block_size,
     )
-
-    attention_lnx = attention_layer(
+    
+    attention_lnx = rnn_layer(
         lnx,
-        lnx,
+        lnx,  # For API compatibility, both inputs are the same
         decoder_positions,
         decoder_segment_ids=decoder_segment_ids,
         deterministic=deterministic,

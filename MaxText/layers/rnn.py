@@ -52,7 +52,7 @@ class RNN(nn.Module):
     ):
         """Applies recurrent processing on the input data."""
         
-        hidden_dim = inputs_q.shape[-1] * 2
+        hidden_dim = inputs_q.shape[-1]
         
         # Linear1: project to larger dimension using proper initialization
         linear1 = DenseGeneral(
@@ -76,7 +76,7 @@ class RNN(nn.Module):
         
         # Normalize - compute norm and divide
         norms = jnp.linalg.norm(H_before_norm, axis=-1, keepdims=True)
-        H_normalized = H_before_norm / (norms + 1e-5)  # Add epsilon for stability
+        H_normalized = H_before_norm / norms # Add epsilon for stability
         H_normalized = checkpoint_name(H_normalized, "normalized_output")
 
         # Linear2: project back to original dimension using proper initialization
